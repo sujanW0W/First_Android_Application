@@ -1,5 +1,6 @@
 package com.example.firstapplication
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
@@ -12,12 +13,14 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.rounded.Email
 import androidx.compose.material.icons.rounded.Phone
+import androidx.compose.material3.Button
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -25,6 +28,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
@@ -89,11 +93,10 @@ fun CardTop(modifier: Modifier = Modifier) {
 fun CardMiddle(fullName: String, studentId: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally
+        verticalArrangement = Arrangement.SpaceEvenly
     ) {
-        AvatarIcon()
-        CardDetails(fullName, studentId, Modifier.padding(top = 8.dp))
+        IdBlock(fullName, studentId)
+        ActivityButtons()
     }
 }
 
@@ -121,6 +124,50 @@ fun CardBottom(modifier: Modifier = Modifier) {
 }
 
 @Composable
+fun IdBlock(fullName: String, studentId: String) {
+    Column(
+        modifier = Modifier.fillMaxWidth(),
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally
+    ) {
+        AvatarIcon()
+        CardDetails(fullName, studentId, Modifier.padding(top = 8.dp))
+    }
+}
+
+@Composable
+fun ActivityButtons() {
+    val localContext = LocalContext.current
+    Column(modifier = Modifier.padding(horizontal = 8.dp)) {
+        Button(
+            onClick = {
+                val intent = Intent(localContext, SecondActivity::class.java)
+                localContext.startActivity(intent)
+            },
+            Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Start Activity Explicitly"
+            )
+        }
+        Button(
+            onClick = {
+                val intent = Intent().apply {
+                    action = "android.intent.action.SecondActivity"
+                    putExtra("ExtraData", "SecondActivity")
+                }
+                localContext.startActivity(intent)
+            },
+            Modifier.fillMaxWidth()
+        ) {
+            Text(
+                text = "Start Activity Implicitly"
+            )
+        }
+    }
+}
+
+@Composable
 fun AvatarIcon() {
     val image = painterResource(R.drawable.android_logo)
     Image(
@@ -134,7 +181,7 @@ fun AvatarIcon() {
 }
 
 @Composable
-fun CardDetails(fullName: String, studentId: String, modifier: Modifier) {
+fun CardDetails(fullName: String, studentId: String, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier,
         verticalArrangement = Arrangement.Center,
