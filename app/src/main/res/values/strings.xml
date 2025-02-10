@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">First Application</string>
+    <string name="sujan_maharjan">Sujan Maharjan</string>
+    <string name="student_id">1559773</string>
+    <string name="sujan_maharjan_1_ndsu_edu">sujan.maharjan.1@ndsu.edu</string>
+    <string name="_415_819_3043">XXX-XXX-XXXX</string>
+    <string name="title_activity_second">SecondActivity</string>
+</resources>
