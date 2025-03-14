@@ -164,6 +164,18 @@ fun ActivityButtons() {
                 text = "Start Activity Implicitly"
             )
         }
+        Button(
+
+            onClick = {
+                val intent = Intent(localContext, ImageActivity::class.java)
+                localContext.startActivity(intent)
+            },
+            Modifier.fillMaxWidth().padding(top = 32.dp)
+        ) {
+            Text(
+                text = "View Image Activity"
+            )
+        }
     }
 }
 
