@@ -1,7 +1,11 @@
 package com.example.firstapplication
 
+import android.app.Activity
+import android.content.Context
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.os.Bundle
+import android.widget.Toast
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -36,7 +40,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.core.app.ActivityCompat
+import androidx.core.content.ContextCompat
 import com.example.firstapplication.ui.theme.FirstApplicationTheme
+
+private const val customPermission = "com.example.firstapplication.MSE712"
+private var permissionRequestCode = 1
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -49,6 +58,22 @@ class MainActivity : ComponentActivity() {
                     studentId = stringResource(R.string.student_id),
                     modifier = Modifier.padding()
                 )
+            }
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+        requestCode: Int,
+        permissions: Array<String>,
+        grantResults: IntArray
+    ) {
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+
+        if (requestCode == permissionRequestCode) {
+            if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                startSecondActivityExplicitly(this)
+            } else {
+                Toast.makeText(this, "Permission Denied!\nPlease allow it from settings.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -117,7 +142,7 @@ fun CardBottom(modifier: Modifier = Modifier) {
                 modifier = Modifier.padding(top = 4.dp)
             ) {
                 Icon(Icons.Rounded.Phone, contentDescription = null)
-                Text(text = stringResource(R.string._415_819_3043))
+                Text(text = stringResource(R.string._phone))
             }
         }
     }
@@ -141,8 +166,21 @@ fun ActivityButtons() {
     Column(modifier = Modifier.padding(horizontal = 8.dp)) {
         Button(
             onClick = {
-                val intent = Intent(localContext, SecondActivity::class.java)
-                localContext.startActivity(intent)
+                if (ContextCompat.checkSelfPermission(
+                        localContext,
+                        customPermission
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        localContext as Activity,
+                        arrayOf(customPermission),
+                        permissionRequestCode
+                    )
+                } else {
+                    startSecondActivityExplicitly(
+                        localContext
+                    )
+                }
             },
             Modifier.fillMaxWidth()
         ) {
@@ -152,11 +190,23 @@ fun ActivityButtons() {
         }
         Button(
             onClick = {
-                val intent = Intent().apply {
-                    action = "android.intent.action.SecondActivity"
-                    putExtra("ExtraData", "SecondActivity")
+                if (ContextCompat.checkSelfPermission(
+                        localContext,
+                        customPermission
+                    ) != PackageManager.PERMISSION_GRANTED
+                ) {
+                    ActivityCompat.requestPermissions(
+                        localContext as Activity,
+                        arrayOf(customPermission),
+                        permissionRequestCode
+                    )
+                } else {
+                    val intent = Intent().apply {
+                        action = "android.intent.action.SecondActivity"
+                        putExtra("ExtraData", "SecondActivity")
+                    }
+                    localContext.startActivity(intent)
                 }
-                localContext.startActivity(intent)
             },
             Modifier.fillMaxWidth()
         ) {
@@ -170,7 +220,9 @@ fun ActivityButtons() {
                 val intent = Intent(localContext, ImageActivity::class.java)
                 localContext.startActivity(intent)
             },
-            Modifier.fillMaxWidth().padding(top = 32.dp)
+            Modifier
+                .fillMaxWidth()
+                .padding(top = 32.dp)
         ) {
             Text(
                 text = "View Image Activity"
@@ -213,6 +265,11 @@ fun CardDetails(fullName: String, studentId: String, modifier: Modifier = Modifi
         )
 
     }
+}
+
+fun startSecondActivityExplicitly(localContext: Context) {
+    val intent = Intent(localContext, SecondActivity::class.java)
+    localContext.startActivity(intent)
 }
 
 @Preview(showBackground = true)

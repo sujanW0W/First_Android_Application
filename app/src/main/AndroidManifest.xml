@@ -2,6 +2,15 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools">
 
+    <permission
+        android:name="com.example.firstapplication.MSE712"
+        android:description="@string/permission_MSE712_description"
+        android:icon="@drawable/android_logo"
+        android:label="@string/permission_MSE712_label"
+        android:protectionLevel="dangerous" />
+
+    <uses-permission android:name="com.example.firstapplication.MSE712" />
+
     <application
         android:allowBackup="true"
         android:dataExtractionRules="@xml/data_extraction_rules"

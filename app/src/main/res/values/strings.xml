@@ -3,8 +3,10 @@
     <string name="sujan_maharjan">Sujan Maharjan</string>
     <string name="student_id">1559773</string>
     <string name="sujan_maharjan_1_ndsu_edu">sujan.maharjan.1@ndsu.edu</string>
-    <string name="_415_819_3043">XXX-XXX-XXXX</string>
+    <string name="_phone">XXX-XXX-XXXX</string>
     <string name="title_activity_second">SecondActivity</string>
     <string name="title_activity_image">ImageActivity</string>
     <string name="title_activity_main">MainActivity</string>
+    <string name="permission_MSE712_label">Access Second Activity</string>
+    <string name="permission_MSE712_description">access Second Activity. This permission is required to access the second activity containing Mobile Software Engineering Challenges.</string>
 </resources>
